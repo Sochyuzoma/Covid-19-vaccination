@@ -1,0 +1,34 @@
+#this is to upgrade the ssl certificate
+pip install --upgrade certifi
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
+
+#importing libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+#read the file from the url link
+df = pd.read_csv("https://open.africa/dataset/358f8917-18d1-445f-8826-c41226afed48/resource/73c809e9-3cbd-41b9-8b4a-2a744e3edc23/download/distribution-of-covid-19-fully-vaccinated-population-in-nigeria.csv")
+df
+
+#removing commas in the data
+df = df.replace(',','', regex=True)
+df
+
+#conversion of string to numeric
+df["Population"] = pd.to_numeric(df["Population"])
+df["First Dose (Partially Vaccinated)"] = pd.to_numeric(df["First Dose (Partially Vaccinated)"])
+df["Second Dose (Fully Vaccinated)"] = pd.to_numeric(df["Second Dose (Fully Vaccinated)"])
+
+df.dtypes
+df.describe()
+df.info()
+
+#plotting graph on seaborn
+
+sns.set(rc = {'figure.figsize':(15,8)})
+locs, labels = plt.xticks()
+plt.setp(labels, rotation=90)
+sns.barplot(df['State'], df['Percentage of Unvaccinated Population'])
